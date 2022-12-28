@@ -1,0 +1,76 @@
+Panait Stefan-Andrei 332CA
+
+	Clasele pe care le-am creat sunt structurate astfel:
+DataBase: -Actions
+	-CurrentUser extends User
+	-InputLoader
+	-DataBase(SingletonClass)
+	-Movie
+	-User
+Pages: - Page si copii: - HomePage
+			- Login
+			-MoviesPage
+			-RegisterPage
+			-SeeDetailsPage
+			-UpgradesPage
+-Output
+-ProgramWorkflow
+-Main
+
+	Sa incepem din Main. In main tot ce fac este sa citesc folosind clasa InputLoader
+retinand toate elementele in DataBase-ul format din 3 liste (Movie, CurrentUser, Actions),
+Creez o instanta a clasei ProgramWorkflow, acolo se va intampla mare parte din implementare,
+tot ce tine de daca sunt pe pagina x fac x si controlul erorilor. Apoi instantiez o lista de 
+clasa Output in care o sa retin ce trebuie sa afisez in fisierul meu json. Creez fisierul
+(Clasa CreateJsonFile) si ii trimit lista de output-uri.
+
+	Acum o sa iau Clasele pe fiecare si le voi exlica pe metode.
+-Clasa Actions am tot ce se poate primii in fisierul json. Impreuna cu metodele de getter si setter,
+constructor si override la tostring;
+
+-Clasa CurrentUser mosteneste clasa User avand si parametrii ei dar si restul detaliilor unui user:
+tokens count, numarul filmelor gratis, lista cu filmele cumparate, lista cu filmele vazute, lista cu
+filmele rated, si lista cu filmele la care utilizatorul curent a dat like. Gettere si settere si
+override la toString;
+
+-Clasa InputLoader aceasta este clasa care face citirea din fisierele json astfel are un inputPath.
+Metodele acestei clase sunt: readData - unde citesc arrayurile de obiecte user si actiuni si clasele
+readUser unde iau fiecare JSONObject din array, readActions, readMovie care fac aceleasi lucruri, doar
+ca pentru JSONArrayul de movie si de actiuni;
+
+-Clasa DataBase este o clasa SINGLETON unde retin toate informatiile care imi trebuiesc in implementare
+astfel am ales sa folosesc o lista de actiuni una de movies si una de currentuser. Metode: 
+findUserByName gaseste utilizator ul in lista mea de utilizatori, findMovieByUsername returneaza
+un film cautat dupa nume in lista de filme, addUser adauga un user apoi constructori getters si setters.
+
+-Movie retine detaliile unui film, metode containsActor verifica daca un film contine un anumit
+actor, containsGenre verifica daca un film contine un anumit gen, getters setters si constructor.
+
+-User Parinte CurrentUser acesta retine mai mult credentialele, metode getters si setters
+
+-Page clasa parinte care extinde toate paginile mele - titlu getters si setters
+
+-Login Pagina de login retine utilizatorul curent si lista acestuia de filme(care nu sunt banate 
+in tara lui), metode: checkIfMovieIsInPurchased care verifica daca Movieul dat este in lista utilizatorului
+curent de cumparate, isWatched verifica daca este in lista de vazute, constructor getter si setter.
+
+-HomePage titlu getters si setters
+
+-MoviesPage - Are o lista cu toate filmele pe care o folosesc mai mult la filtrare ca sa nu stric 
+DataBase, metode getMovieListNoCountry care returneaza o lista de filme in afara de filmele care o tara
+data ca parametru, getters si setters
+
+-RegisterPage usage for title - constructor getters and setters
+
+-SeeDetailsPage retine filmul pentru care trebuie sa arat detalii, constructors getters and setters
+
+-Upgrades page - usage for title 
+
+-Create JsonFile - creez fisierul json primint inputul in listToPrint metoda work - pentru creeare
+
+-Output metoda cu campurile care trebuiesc afisate: current user, movie list si error, metode getters
+si setters;
+
+-ProgramWorkflow - primeste database si rezolva functionarea dorita in Work, avand si o functie extra
+pe care o folosesc sa fac DeepCopy unei liste de obiecte
+
