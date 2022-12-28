@@ -14,6 +14,7 @@ public class Main {
     public static void main(final String[] args) throws IOException {
         //creez un input loader
         InputLoader inputLoader = new InputLoader();
+        //test manual
         inputLoader.init("D:\\POO_TV\\checker\\resources\\in\\basic_2.json");
      //   inputLoader.init(args[0]);
         // retin elementele din input loader in baza mea de date
