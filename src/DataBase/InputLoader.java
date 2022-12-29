@@ -199,16 +199,49 @@ public final class InputLoader {
 
                         JSONArray jsonArrayGenre = (JSONArray) jsonContains.get("genre");
                         if (jsonArrayGenre != null) {
-
-
                             for (Object jsonGenre : jsonArrayGenre) {
                                 genre.add(jsonGenre.toString());
                             }
                         }
                     }
                 }
+                JSONObject jsonAddedMovie = ((JSONObject) ((JSONObject) jsonAction).get("addedMovie"));
+                List<String> countriesForMovie = new ArrayList<String>();
+                String nameOfMovie = null;
+                String yearOfMovie = null;
+
+                Integer durationOfMovie = 0;
+                if (jsonAddedMovie != null) {
+                    nameOfMovie = (String) jsonAddedMovie.get("name");
+                    yearOfMovie = (String) jsonAddedMovie.get("year");
+                    Long durationOfMAux = (Long) jsonAddedMovie.get("duration");
+                    if (durationOfMAux != null) {
+                        durationOfMovie = durationOfMAux.intValue();
+                    }
+
+                    JSONArray jsonArrGenre = (JSONArray) jsonAddedMovie.get("genres");
+                    if (jsonArrGenre != null) {
+                        for (Object jsonGen : jsonArrGenre) {
+                            genre.add(jsonGen.toString());
+
+                        }
+                    }
+                    JSONArray jsonArrActors = (JSONArray) jsonAddedMovie.get("actors");
+                    if (jsonArrActors != null) {
+                        for (Object jsonAct : jsonArrActors) {
+                            actors.add(jsonAct.toString());
+                        }
+                    }
+                    JSONArray jsonArrCountries = (JSONArray) jsonAddedMovie.get("countriesBanned");
+                    if (jsonArrCountries != null) {
+                        for (Object jsonCountries : jsonArrCountries) {
+                            countriesForMovie.add(jsonCountries.toString());
+                        }
+                    }
+                }
                 actionsList.add(new Actions(type, page, feature, userFromActions, startsWith,
-                        rating, duration, actors, genre, movie, count, rate));
+                        rating, duration, actors, genre, movie, count, rate, countriesForMovie,
+                        durationOfMovie, nameOfMovie, yearOfMovie));
             }
         }
         return actionsList;

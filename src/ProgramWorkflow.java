@@ -46,7 +46,7 @@ public final class ProgramWorkflow {
         //incep sa trec prin lista mea de actiuni
         List<Output> listToPrint = new ArrayList<Output>();
         for (Actions action : dataBase.getActions()) {
-
+            System.out.println(action);
             Output output = new Output();
             List<Movie> purchasedMovieList;
             register = 1;
@@ -65,21 +65,10 @@ public final class ProgramWorkflow {
                     currentPage = homePage;
                     isLogged = 0;
                 } else if (action.getPage().equals("movies") && isLogged == 1) {
-                    currentPage = moviesPage;
-                    login.setLoggedInMovieList(moviesPage.getMovieListNoCountry(
-                            login.getUserLoggedIn().getCountry()));
 
-                    //setez output
-                    output.setCurrentMovieList(deepCopy(login.getLoggedInMovieList()));
-                    output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
-                        login.getUserLoggedIn().getTokensCount(),
-                        login.getUserLoggedIn().getNumFreePremiumMovies(),
-                        new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
-                        new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
-                        new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
-                        new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
-                    //adaug la lista mea de output
-                    listToPrint.add(output);
+                    currentPage = moviesPage;
+                    chPgMovies(currentPage, moviesPage, login, output, listToPrint);
+
                 } else if (action.getPage().equals("see details")) {
                     boolean found_movie = false;
                     Movie seeDetailsMovie = new Movie();
@@ -500,5 +489,23 @@ public final class ProgramWorkflow {
 
 
         return output;
+    }
+
+    public void chPgMovies(Page currentPage, MoviesPage moviesPage, Login login, Output output, List<Output> listToPrint) {
+        currentPage = moviesPage;
+        login.setLoggedInMovieList(moviesPage.getMovieListNoCountry(
+                login.getUserLoggedIn().getCountry()));
+
+        //setez output
+        output.setCurrentMovieList(deepCopy(login.getLoggedInMovieList()));
+        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                login.getUserLoggedIn().getTokensCount(),
+                login.getUserLoggedIn().getNumFreePremiumMovies(),
+                new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+        //adaug la lista mea de output
+        listToPrint.add(output);
     }
 }
