@@ -140,11 +140,12 @@ public final class InputLoader {
                 String page = (String) ((JSONObject) jsonAction).get("page");
                 String feature = (String) ((JSONObject) jsonAction).get("feature");
                 String countStr = (String) ((JSONObject) jsonAction).get("count");
-                Long auxRate = (Long) ((JSONObject) jsonAction).get("rate");
-                Integer rate = 0;
-                if (auxRate != null) {
-                    rate = auxRate.intValue();
-                }
+                String subscribedGenre = (String) ((JSONObject) jsonAction).get("subscribedGenre");
+                String rate = (String) ((JSONObject) jsonAction).get("rate");
+               // Integer rate = 0;
+//                if (auxRate != null) {
+//                    rate = auxRate.intValue();
+//                }
 
                 Integer count = 0;
                 if (countStr != null) {
@@ -241,7 +242,7 @@ public final class InputLoader {
                 }
                 actionsList.add(new Actions(type, page, feature, userFromActions, startsWith,
                         rating, duration, actors, genre, movie, count, rate, countriesForMovie,
-                        durationOfMovie, nameOfMovie, yearOfMovie));
+                        durationOfMovie, nameOfMovie, yearOfMovie, subscribedGenre));
             }
         }
         return actionsList;

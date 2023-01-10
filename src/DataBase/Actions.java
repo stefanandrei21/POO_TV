@@ -26,6 +26,7 @@ public final class Actions {
     private final Integer durationOfMovie;
     private final String nameOfMovie;
     private final String yearOfMovie;
+    private final String subscribedGenre;
 
     public Actions() {
         this.countriesBanned = null;
@@ -44,15 +45,16 @@ public final class Actions {
         this.durationOfMovie = 0;
         this.nameOfMovie = null;
         this.yearOfMovie = null;
+        this.subscribedGenre = null;
     }
 
     public Actions(final String type, final String page, final String feature,
                    final User user, final String startsWith,
                    final String rating, final String duration, final List<String> actors,
                    final List<String> genre, final String movie, final Integer count,
-                   final Integer rate, final List<String> countriesBanned,
+                   final String rate, final List<String> countriesBanned,
                    final Integer durationOfMovie, final String nameOfMovie,
-                   final String yearOfMovie) {
+                   final String yearOfMovie, final String subscribedGenre) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -64,11 +66,14 @@ public final class Actions {
         this.genre = genre;
         this.movie = movie;
         this.count = count;
-        this.rate = rate;
+        if(rate != null)
+            this.rate = Integer.valueOf(rate);
+        else this.rate = 0;
         this.countriesBanned = countriesBanned;
         this.durationOfMovie = durationOfMovie;
         this.nameOfMovie = nameOfMovie;
         this.yearOfMovie = yearOfMovie;
+        this.subscribedGenre = subscribedGenre;
     }
 
     public Actions(final String type, final String page,
@@ -76,9 +81,9 @@ public final class Actions {
                    final String duration, final String rating,
                    final List<String> actors, final List<String> genre,
                    final String movie, final Integer count,
-                   final Integer rate, final List<String> countriesBanned,
+                   final String rate, final List<String> countriesBanned,
                    final Integer durationOfMovie, final String nameOfMovie,
-                   final String yearOfMovie) {
+                   final String yearOfMovie, final String subscribedGenre) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -89,11 +94,12 @@ public final class Actions {
         this.genre = genre;
         this.movie = movie;
         this.count = count;
-        this.rate = rate;
+        this.rate = Integer.valueOf(rate);
         this.countriesBanned = countriesBanned;
         this.durationOfMovie = durationOfMovie;
         this.nameOfMovie = nameOfMovie;
         this.yearOfMovie = yearOfMovie;
+        this.subscribedGenre = subscribedGenre;
     }
 
     public Integer getRate() {

@@ -1,7 +1,9 @@
 package DataBase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class CurrentUser extends User {
     private int tokensCount;
@@ -13,6 +15,7 @@ public final class CurrentUser extends User {
     private List<Movie> likedMovies = new ArrayList<>();
     private List<Movie> ratedMovies = new ArrayList<>();
     private List<Movie> notifications = new ArrayList<>();
+    Map<String, Integer> rememberRated = new HashMap<>();
     public CurrentUser(final int tokensCount, final int numFreePremiumMovies,
                        final List<Movie>  purchasedMovies,
                        final List<Movie>  watchedMovies, final List<Movie> likedMovies,
@@ -50,6 +53,14 @@ public final class CurrentUser extends User {
         this.watchedMovies = watchedMovies;
         this.likedMovies = likedMovies;
         this.ratedMovies = ratedMovies;
+    }
+
+    public Map<String, Integer> getRememberRated() {
+        return rememberRated;
+    }
+
+    public void setRememberRated(Map<String, Integer> rememberRated) {
+        this.rememberRated = rememberRated;
     }
 
     public List<Movie>  getNotifications() {

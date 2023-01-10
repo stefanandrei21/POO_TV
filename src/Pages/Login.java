@@ -1,9 +1,11 @@
 package Pages;
 import DataBase.CurrentUser;
+import DataBase.DataBase;
 import DataBase.Movie;
 import DataBase.User;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -84,19 +86,104 @@ public final class Login extends Page {
         return null;
     }
 
+    public boolean IsInPurchased(final String movie) {
+        for (Movie goMovie : this.userLoggedIn.getPurchasedMovies()) {
+            if (goMovie.getName().equals(movie)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /**
      * verifica daca un film este vazut
      * @param movie
      * @return
      */
-    public Movie ifWatched(final String movie) {
+    public boolean ifWatched(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getWatchedMovies()) {
             if (goMovie.getName().equals(movie)) {
-                return goMovie;
+                return true;
             }
         }
 
-        return null;
+        return false;
+    }
+
+    public boolean ifRated(final String movie) {
+        for (Movie goMovie : this.userLoggedIn.getRatedMovies()) {
+            if (goMovie.getName().equals(movie)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<Movie> updateWatchedMl(List<Movie> moviesInDatabase) {
+        List<Movie> movieList = new ArrayList<Movie>();
+        //iau pe rand fiecare film din lista
+        //verific daca este in database
+        //daca este il pun in lista
+
+
+        for(Movie movie : userLoggedIn.getWatchedMovies()) {
+            for(Movie movieInD : moviesInDatabase) {
+                if(movie.getName().equals(movieInD.getName())) {
+                    movieList.add(movieInD);
+                }
+            }
+        }
+        return movieList;
+    }
+
+    public List<Movie> updatePurchasedMl(List<Movie> moviesInDatabase) {
+        List<Movie> movieList = new ArrayList<Movie>();
+        //iau pe rand fiecare film din lista
+        //verific daca este in database
+        //daca este il pun in lista
+
+
+        for(Movie movie : userLoggedIn.getPurchasedMovies()) {
+            for(Movie movieInD : moviesInDatabase) {
+                if(movie.getName().equals(movieInD.getName())) {
+                    movieList.add(movieInD);
+                }
+            }
+        }
+        return movieList;
+    }
+    public List<Movie> updateRatedMl(List<Movie> moviesInDatabase) {
+        List<Movie> movieList = new ArrayList<Movie>();
+        //iau pe rand fiecare film din lista
+        //verific daca este in database
+        //daca este il pun in lista
+
+
+        for(Movie movie : userLoggedIn.getRatedMovies()) {
+            for(Movie movieInD : moviesInDatabase) {
+                if(movie.getName().equals(movieInD.getName())) {
+                    movieList.add(movieInD);
+                }
+            }
+        }
+        return movieList;
+    }
+    public List<Movie> updateLikedMl(List<Movie> moviesInDatabase) {
+        List<Movie> movieList = new ArrayList<Movie>();
+        //iau pe rand fiecare film din lista
+        //verific daca este in database
+        //daca este il pun in lista
+
+
+        for(Movie movie : userLoggedIn.getLikedMovies()) {
+            for(Movie movieInD : moviesInDatabase) {
+                if(movie.getName().equals(movieInD.getName())) {
+                    movieList.add(movieInD);
+                }
+            }
+        }
+        return movieList;
     }
 
     /**
@@ -113,7 +200,7 @@ public final class Login extends Page {
 
     /**
      * getter si setter pt userul logat
-     * @return
+     * @CurrentUser
      */
     public CurrentUser getUserLoggedIn() {
         return userLoggedIn;

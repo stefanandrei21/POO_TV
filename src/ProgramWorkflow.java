@@ -46,7 +46,7 @@ public final class ProgramWorkflow {
         //incep sa trec prin lista mea de actiuni
         List<Output> listToPrint = new ArrayList<Output>();
         for (Actions action : dataBase.getActions()) {
-            System.out.println(action);
+         //   System.out.println(action);
             Output output = new Output();
             List<Movie> purchasedMovieList;
             register = 1;
@@ -65,8 +65,8 @@ public final class ProgramWorkflow {
                     currentPage = homePage;
                     isLogged = 0;
                 } else if (action.getPage().equals("movies") && isLogged == 1) {
-
                     currentPage = moviesPage;
+
                     chPgMovies(currentPage, moviesPage, login, output, listToPrint);
 
                 } else if (action.getPage().equals("see details")) {
@@ -133,6 +133,7 @@ public final class ProgramWorkflow {
                     if (login.verifyCredentials(dataBase.getUserList()) && isLogged == 0) {
                         CurrentUser userToWork = dataBase.findUserByUsername(loggedUser.getName());
 
+
                         CurrentUser loginUser = new CurrentUser(userToWork,
                                 userToWork.getTokensCount(),
                                 userToWork.getNumFreePremiumMovies(),
@@ -142,6 +143,14 @@ public final class ProgramWorkflow {
                                 userToWork.getRatedMovies());
 
                         login.setUserLoggedIn(loginUser);
+
+                        login.getUserLoggedIn().setPurchasedMovies(login.updatePurchasedMl(dataBase.getMovieList()));
+                        login.getUserLoggedIn().setWatchedMovies(login.updateWatchedMl(dataBase.getMovieList()));
+                        login.getUserLoggedIn().setRatedMovies(login.updateRatedMl(dataBase.getMovieList()));
+                        login.getUserLoggedIn().setLikedMovies(login.updateLikedMl(dataBase.getMovieList()));
+                        login.getUserLoggedIn().setRememberRated(dataBase.findUserByUsername(login.getUserLoggedIn().getName()).getRememberRated());
+
+
                         //afisez userul
                         purchasedMovieList =
                             new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies()));
@@ -207,7 +216,7 @@ public final class ProgramWorkflow {
                             login.getUserLoggedIn().getNumFreePremiumMovies(),
                             new ArrayList<>(deepCopy(
                                     login.getUserLoggedIn().getPurchasedMovies())),
-                            new ArrayList<>(login.getUserLoggedIn().getWatchedMovies()),
+                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
                             new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
                             new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
 
@@ -305,80 +314,97 @@ public final class ProgramWorkflow {
                     //cumpar film
                 } else if (action.getFeature().equals("purchase")
                         && currentPage.getTitle().equals("seeDetailsPage")) {
-                    boolean buyMovie = false;
-                    //verific ce tip de cont am
-                    if (login.getUserLoggedIn().getAccountType().equals("standard")) {
-                        if (login.getUserLoggedIn().getTokensCount() >= 2) {
-                            login.getUserLoggedIn().setTokensCount(
-                                    login.getUserLoggedIn().getTokensCount() - 2);
-                            buyMovie = true;
-                        }
-                    } else if (login.getUserLoggedIn().getAccountType().equals("premium")) {
-                        if (login.getUserLoggedIn().
-                                getNumFreePremiumMovies() > 0) {
-                            login.getUserLoggedIn().setNumFreePremiumMovies(
-                                    login.getUserLoggedIn().getNumFreePremiumMovies() - 1);
-                            buyMovie = true;
-                        } else {
+                    if (login.IsInPurchased(seeDetailsPage.getSeeDetailsToMovie().getName()) == false) {
+
+
+                        boolean buyMovie = false;
+
+                        //verific ce tip de cont am
+                        if (login.getUserLoggedIn().getAccountType().equals("standard")) {
                             if (login.getUserLoggedIn().getTokensCount() >= 2) {
                                 login.getUserLoggedIn().setTokensCount(
                                         login.getUserLoggedIn().getTokensCount() - 2);
                                 buyMovie = true;
                             }
+                        } else if (login.getUserLoggedIn().getAccountType().equals("premium")) {
+                            if (login.getUserLoggedIn().
+                                    getNumFreePremiumMovies() > 0) {
+                                login.getUserLoggedIn().setNumFreePremiumMovies(
+                                        login.getUserLoggedIn().getNumFreePremiumMovies() - 1);
+                                buyMovie = true;
+                            } else {
+                                if (login.getUserLoggedIn().getTokensCount() >= 2) {
+                                    login.getUserLoggedIn().setTokensCount(
+                                            login.getUserLoggedIn().getTokensCount() - 2);
+                                    buyMovie = true;
+                                }
+                            }
                         }
-                    }
-                    if (buyMovie) {
-                        login.getUserLoggedIn().getPurchasedMovies().
-                                add(seeDetailsPage.getSeeDetailsToMovie());
-                    }
-                    //setez in database
-                    dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
-                        setNumFreePremiumMovies(login.getUserLoggedIn().getNumFreePremiumMovies());
-                    dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
-                            setTokensCount(login.getUserLoggedIn().getTokensCount());
-                    List<Movie> setMovToL = new ArrayList<Movie>();
-                    setMovToL.add(seeDetailsPage.getSeeDetailsToMovie());
 
-                    //setez output
-                    output.setCurrentMovieList(deepCopy(setMovToL));
-                    output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
-                            login.getUserLoggedIn().getTokensCount(),
-                            login.getUserLoggedIn().getNumFreePremiumMovies(),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+                        if (buyMovie) {
+                            login.getUserLoggedIn().getPurchasedMovies().
+                                    add(seeDetailsPage.getSeeDetailsToMovie());
+                            dataBase.findUserByUsername(login.getUserLoggedIn().getName()).setPurchasedMovies(login.getUserLoggedIn().getPurchasedMovies());
 
-                    listToPrint.add(output);
+                            //setez in database
+                            dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
+                                    setNumFreePremiumMovies(login.getUserLoggedIn().getNumFreePremiumMovies());
+                            dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
+                                    setTokensCount(login.getUserLoggedIn().getTokensCount());
+
+                            List<Movie> setMovToL = new ArrayList<Movie>();
+                            setMovToL.add(seeDetailsPage.getSeeDetailsToMovie());
+
+                            //setez output
+                            output.setCurrentMovieList(deepCopy(setMovToL));
+                            output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                                    login.getUserLoggedIn().getTokensCount(),
+                                    login.getUserLoggedIn().getNumFreePremiumMovies(),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+                            listToPrint.add(output);
+                        }
+                    } else {
+                        output.setError("Error");
+                    }
+
 
                 } else if (action.getFeature().equals("watch")
                         && currentPage.getTitle().equals("seeDetailsPage")) {
                     //dverific daca filmul a fost cumparat
                     //pentru a l vizualiza
-                    if (login.checkIfMovieIsInPurchased(
-                            seeDetailsPage.getSeeDetailsToMovie().getName()) != null) {
-                        //setez in login si setez si in database
-                        login.getUserLoggedIn().getWatchedMovies().
-                                add(login.checkIfMovieIsInPurchased(
-                                        seeDetailsPage.getSeeDetailsToMovie().getName()));
-                        dataBase.findUserByUsername(login.getUserLoggedIn().
-                                        getName()).
-                                setWatchedMovies(login.getUserLoggedIn().getWatchedMovies());
+                    if(login.getUserLoggedIn().getName().equals("Mihail")) {
+                        int x = 0;
+                    }
+                    if(login.ifWatched(seeDetailsPage.getSeeDetailsToMovie().getName()) != true) {
+                        if (login.checkIfMovieIsInPurchased(
+                                seeDetailsPage.getSeeDetailsToMovie().getName()) != null) {
+                            //setez in login si setez si in database
 
-                        //afisez
-                        List<Movie> ml = new ArrayList<>();
-                        ml.add(seeDetailsPage.getSeeDetailsToMovie());
-                        output.setCurrentMovieList(deepCopy(ml));
-                        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
-                            login.getUserLoggedIn().getTokensCount(),
-                            login.getUserLoggedIn().getNumFreePremiumMovies(),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
-                        listToPrint.add(output);
-                    } else {
-                        output.setError("Error");
+                            login.getUserLoggedIn().getWatchedMovies().
+                                    add(login.checkIfMovieIsInPurchased(
+                                            seeDetailsPage.getSeeDetailsToMovie().getName()));
+                            dataBase.findUserByUsername(login.getUserLoggedIn().
+                                            getName()).
+                                    setWatchedMovies(login.getUserLoggedIn().getWatchedMovies());
+
+                            //afisez
+                            List<Movie> ml = new ArrayList<>();
+                            ml.add(seeDetailsPage.getSeeDetailsToMovie());
+                            output.setCurrentMovieList(deepCopy(ml));
+                            output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                                    login.getUserLoggedIn().getTokensCount(),
+                                    login.getUserLoggedIn().getNumFreePremiumMovies(),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+                            listToPrint.add(output);
+                        } else {
+                            output.setError("Error");
+                        }
                     }
 
                 } else if (action.getFeature().equals("like")
@@ -418,18 +444,67 @@ public final class ProgramWorkflow {
                     //pentru a da rate verific daca filmul a fost cumparat
                     Movie rateMovie = login.checkIfMovieIsInPurchased(
                             seeDetailsPage.getSeeDetailsToMovie().getName());
-                    if (rateMovie != null && action.getRate() >= 0 && action.getRate() <= 5) {
+                    if(login.ifRated(rateMovie.getName())) {
+                        List<Movie> ratedM = new ArrayList<Movie>();
+                        ratedM.add(seeDetailsPage.getSeeDetailsToMovie());
+                        //setez si la output
+                        output.setCurrentMovieList(deepCopy(ratedM));
+                        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                                login.getUserLoggedIn().getTokensCount(),
+                                login.getUserLoggedIn().getNumFreePremiumMovies(),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+
+                        listToPrint.add(output);
+                        Integer numRatings = rateMovie.getNumRatings();
+                        Double ratioRating = rateMovie.getRating();
+                        System.out.println("Ratio Rating initial = " + ratioRating);
+                        System.out.println("Numar rating initial = " + numRatings);
+                        Double aux = numRatings * ratioRating;
+                        System.out.println("suma initiala = " + aux );
+                        Double newSum = aux + action.getRate();
+                        Double update = newSum - login.getUserLoggedIn().getRememberRated().get(rateMovie.getName());
+                        System.out.println("suma noua = " + newSum);
+                        System.out.println(update);
+                        Double newRating = update / numRatings;
+//                        System.out.println(newSumRating);
+//                        System.out.println(numRatings);
+                        rateMovie.setRating(newRating);
+                        dataBase.findMovieByUsername(
+                                rateMovie.getName()).setRating(rateMovie.getRating());
+                        List<Movie> nratedM = new ArrayList<Movie>();
+                        nratedM.add(seeDetailsPage.getSeeDetailsToMovie());
+                        //setez si la output
+                        output.setCurrentMovieList(deepCopy(nratedM));
+                        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                                login.getUserLoggedIn().getTokensCount(),
+                                login.getUserLoggedIn().getNumFreePremiumMovies(),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+
+                        listToPrint.add(output);
+
+                    } else if (rateMovie != null && action.getRate() >= 0 && action.getRate() <= 5 && login.ifRated(rateMovie.getName()) == false) {
                         //daca da setez in login si in database
+                        login.getUserLoggedIn().getRememberRated().put(rateMovie.getName(), action.getRate());
                         login.getUserLoggedIn().getRatedMovies().add(rateMovie);
                         rateMovie.setNumRatings(rateMovie.getNumRatings() + 1);
                         rateMovie.setRating((rateMovie.getRating() + action.getRate())
                                 / rateMovie.getNumRatings());
+
+                        dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
+                                setRememberRated(login.getUserLoggedIn().getRememberRated());
                         dataBase.findUserByUsername(login.getUserLoggedIn().getName()).
                                 setRatedMovies(login.getUserLoggedIn().getRatedMovies());
                         dataBase.findMovieByUsername(
                                 rateMovie.getName()).setNumRatings(rateMovie.getNumRatings());
                         dataBase.findMovieByUsername(
                                 rateMovie.getName()).setRating(rateMovie.getRating());
+
                         List<Movie> ratedM = new ArrayList<Movie>();
                         ratedM.add(seeDetailsPage.getSeeDetailsToMovie());
                     //setez si la output
@@ -447,7 +522,14 @@ public final class ProgramWorkflow {
                         output.setError("Error");
                     }
 
-                } else {
+                } else if (action.getFeature().equals("subscribe")
+                        && currentPage.getTitle().equals("seeDetailsPage")) {
+                    if (seeDetailsPage.getSeeDetailsToMovie() == null) {
+                        output.setError("Error");
+                    }
+
+                }
+                else {
                     output.setError("Error");
                 }
             } else if (action.getType().equals("back")) {
@@ -455,6 +537,11 @@ public final class ProgramWorkflow {
                     output.setError("Error");
                 } else if (currentPage.getTitle().equals("loginpage")) {
                     output.setError("Error");
+                } else if (currentPage.getTitle().equals("seeDetailsPage")) {
+                    currentPage = moviesPage;
+
+                    chPgMovies(currentPage, moviesPage, login, output, listToPrint);
+                    System.out.println(moviesPage.getMovieList());
                 }
             }
 
@@ -468,7 +555,7 @@ public final class ProgramWorkflow {
     }
 
     /**
-     * deep Copy function for crating
+     * deep Copy function for creating
      * the output
      * @param movies
      * @return
@@ -492,12 +579,15 @@ public final class ProgramWorkflow {
     }
 
     public void chPgMovies(Page currentPage, MoviesPage moviesPage, Login login, Output output, List<Output> listToPrint) {
-        currentPage = moviesPage;
+
         login.setLoggedInMovieList(moviesPage.getMovieListNoCountry(
                 login.getUserLoggedIn().getCountry()));
 
+        System.out.println(login.getUserLoggedIn().getPassword());
+        System.out.println(login.getLoggedInMovieList());
         //setez output
         output.setCurrentMovieList(deepCopy(login.getLoggedInMovieList()));
+        System.out.println(output.getCurrentMovieList());
         output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
                 login.getUserLoggedIn().getTokensCount(),
                 login.getUserLoggedIn().getNumFreePremiumMovies(),
