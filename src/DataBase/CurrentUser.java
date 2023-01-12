@@ -15,7 +15,9 @@ public final class CurrentUser extends User {
     private List<Movie> likedMovies = new ArrayList<>();
     private List<Movie> ratedMovies = new ArrayList<>();
     private List<Notification> notifications = new ArrayList<>();
-    Map<String, Integer> rememberRated = new HashMap<>();
+    private Map<String, Integer> rememberRated = new HashMap<>();
+    private List<String> subscribed = new ArrayList<String>();
+    private Map<String, Integer> genreLikes = new HashMap<String, Integer>();
     public CurrentUser(final int tokensCount, final int numFreePremiumMovies,
                        final List<Movie>  purchasedMovies,
                        final List<Movie>  watchedMovies, final List<Movie> likedMovies,
@@ -34,7 +36,7 @@ public final class CurrentUser extends User {
     public CurrentUser(final User user) {
         super(user);
         this.tokensCount = 0;
-        this.numFreePremiumMovies = 15;
+        this.numFreePremiumMovies = Constants.NUMBER_OF_FREE_MOVIES;
         this.purchasedMovies = new ArrayList<>();
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
@@ -71,17 +73,31 @@ public final class CurrentUser extends User {
         this.notifications = notificantions;
     }
 
+    public Map<String, Integer> getGenreLikes() {
+        return genreLikes;
+    }
 
+    public void setGenreLikes(final Map<String, Integer> genreLikes) {
+        this.genreLikes = genreLikes;
+    }
+
+    public List<String> getSubscribed() {
+        return subscribed;
+    }
+
+    public void setSubscribed(final List<String> subscribed) {
+        this.subscribed = subscribed;
+    }
 
     public Map<String, Integer> getRememberRated() {
         return rememberRated;
     }
 
-    public void setRememberRated(Map<String, Integer> rememberRated) {
+    public void setRememberRated(final Map<String, Integer> rememberRated) {
         this.rememberRated = rememberRated;
     }
 
-    public void setNotifications(List<Notification> notifications) {
+    public void setNotifications(final List<Notification> notifications) {
         this.notifications = notifications;
     }
 

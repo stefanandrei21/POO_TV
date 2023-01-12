@@ -13,8 +13,7 @@ import Pages.Login;
 import Pages.RegisterPage;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public final class ProgramWorkflow {
     private DataBase dataBase;
@@ -97,14 +96,21 @@ public final class ProgramWorkflow {
                         purchasedMovieList =
                                 new ArrayList<>(deepCopy(login.getUserLoggedIn()
                                         .getPurchasedMovies()));
+//                        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+//                            login.getUserLoggedIn().getTokensCount(),
+//                            login.getUserLoggedIn().getNumFreePremiumMovies(),
+//                            purchasedMovieList,
+//                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+//                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+//                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
                         output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
-                            login.getUserLoggedIn().getTokensCount(),
-                            login.getUserLoggedIn().getNumFreePremiumMovies(),
-                            purchasedMovieList,
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
-                            new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
-
+                                login.getUserLoggedIn().getTokensCount(),
+                                login.getUserLoggedIn().getNumFreePremiumMovies(),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies())),
+                                new ArrayList<>(deepCopyNotification(login.getUserLoggedIn().getNotifications()))));
                         listToPrint.add(output);
                     }
                 } else if (action.getPage().equals("upgrades") && isLogged == 1) {
@@ -304,19 +310,20 @@ public final class ProgramWorkflow {
                     //cumpar premium account
                 } else if (action.getFeature().equals("buy premium account")
                         && currentPage.getTitle().equals("UpgradesPage")) {
-                    if (login.getUserLoggedIn().getTokensCount() >= 10) {
-                        //setez in login
-                        login.getUserLoggedIn().setTokensCount(
-                                login.getUserLoggedIn().getTokensCount() - 10);
-                        login.getUserLoggedIn().setAccountType("premium");
-                        //setez in database
-                        dataBase.findUserByUsername(
-                                login.getUserLoggedIn().getName()).setAccountType("premium");
-                    }
+//                    if (login.getUserLoggedIn().getTokensCount() >= 10) {
+//                        //setez in login
+//                        login.getUserLoggedIn().setTokensCount(
+//                                login.getUserLoggedIn().getTokensCount() - 10);
+//                        login.getUserLoggedIn().setAccountType("premium");
+//                        //setez in database
+//                        dataBase.findUserByUsername(
+//                                login.getUserLoggedIn().getName()).setAccountType("premium");
+//                    }
+                    buyPremiumAccount(login);
                     //cumpar film
                 } else if (action.getFeature().equals("purchase")
                         && currentPage.getTitle().equals("seeDetailsPage")) {
-                    if (login.IsInPurchased(seeDetailsPage.getSeeDetailsToMovie().getName()) == false) {
+                    if (login.isInPurchased(seeDetailsPage.getSeeDetailsToMovie().getName()) == false) {
 
 
                         boolean buyMovie = false;
@@ -446,7 +453,7 @@ public final class ProgramWorkflow {
                     //pentru a da rate verific daca filmul a fost cumparat
                     Movie rateMovie = login.checkIfMovieIsInPurchased(
                             seeDetailsPage.getSeeDetailsToMovie().getName());
-                    if(login.ifRated(rateMovie.getName())) {
+                    if(rateMovie != null && login.ifRated(rateMovie.getName())) {
                         Output out2 = new Output();
                         List<Movie> ratedM = new ArrayList<Movie>();
                         ratedM.add(seeDetailsPage.getSeeDetailsToMovie());
@@ -527,16 +534,35 @@ public final class ProgramWorkflow {
 
                 } else if (action.getFeature().equals("subscribe")
                         && currentPage.getTitle().equals("seeDetailsPage")) {
+                    boolean okish = false;
+                    for (String str : login.getUserLoggedIn().getSubscribed()) {
+                        if (action.getSubscribedGenre().equals(str)) {
+                            okish = true;
+                            break;
+                        }
+                    }
                     if (seeDetailsPage.getSeeDetailsToMovie() == null) {
                         output.setError("Error");
+                    } else if (okish) {
+                        output.setError("Error");
+                    }else {
+                        boolean verifyGenre = false;
+                        for (String genre : seeDetailsPage.getSeeDetailsToMovie().getGenres()) {
+                            if (genre.equals(action.getSubscribedGenre())) {
+                                verifyGenre = true;
+                                break;
+                            }
+                        }
+                        if (verifyGenre) {
+                            login.getUserLoggedIn().getSubscribed().add(action.getSubscribedGenre());
+                        }
                     }
-
                 }
                 else {
                     output.setError("Error");
                 }
             } else if (action.getType().equals("back")) {
-                if(currentPage.getTitle().equals("homePage")) {
+                if (currentPage.getTitle().equals("homePage")) {
                     output.setError("Error");
                 } else if (currentPage.getTitle().equals("loginpage")) {
                     output.setError("Error");
@@ -545,6 +571,37 @@ public final class ProgramWorkflow {
 
                     chPgMovies(currentPage, moviesPage, login, output, listToPrint);
 
+                }else if (currentPage.getTitle().equals("moviesPage")) {
+                    currentPage = homePage;
+
+
+                } else {
+                    output.setError("Error");
+                }
+            } else if (action.getType().equals("database")) {
+                if (action.getFeature().equals("add")) {
+                    System.out.println(action);
+                    Movie addNewMovie = new Movie(action.getNameOfMovie(),Integer.parseInt(action.getYearOfMovie()),
+                            action.getDurationOfMovie(), action.getGenre(), action.getCountriesBanned(),
+                            action.getActors(), 0, 0.0, 0);
+
+                    dataBase.getMovieList().add(addNewMovie);
+                    boolean verifyIfNotification = false;
+                    for (String genre : addNewMovie.getGenres()) {
+                        for (String subscribed : login.getUserLoggedIn().getSubscribed()) {
+                            if (genre.equals(subscribed)) {
+                                verifyIfNotification = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (verifyIfNotification == true) {
+                        System.out.println("aici2");
+                        Notification notif = new Notification(addNewMovie.getName(), "ADD");
+                        login.getUserLoggedIn().getNotifications().add(notif);
+                        System.out.println(login.getUserLoggedIn().getNotifications());
+
+                    }
                 }
             }
           //  System.out.println(dataBase.getActions().size() + " " + i);
@@ -561,11 +618,60 @@ public final class ProgramWorkflow {
             // System.out.println("aiciestei" + i);
             System.out.println("da");
             Output output = new Output("da");
-            Notification myNot = new Notification("No recommendation", "Recommendation");
-            List<Notification> myNotList = new ArrayList<Notification>();
-            myNotList.add(myNot);
+
+            List<Notification> myNotList = new ArrayList<Notification>(deepCopyNotification(login.getUserLoggedIn().getNotifications()));
+
 //            List<Movie> ml = null;
 //            output.setCurrentMovieList(ml);
+            for (Movie movie : login.getUserLoggedIn().getLikedMovies()) {
+                for (String genre : movie.getGenres()) {
+                    if (login.getUserLoggedIn().getGenreLikes().get(genre) == null) {
+                        login.getUserLoggedIn().getGenreLikes().put(genre, 1);
+                    } else {
+                        Integer update = login.getUserLoggedIn().getGenreLikes().get(genre) + 1;
+                        login.getUserLoggedIn().getGenreLikes().put(genre, update);
+
+                    }
+                }
+            }
+            Comparator<String> comparator = new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return login.getUserLoggedIn().getGenreLikes().get(o2) - login.getUserLoggedIn().getGenreLikes().get(o2);
+                }
+            };
+            Map<String, Integer> sortedMap = new TreeMap<>(comparator);
+            sortedMap.putAll(login.getUserLoggedIn().getGenreLikes());
+
+            if (sortedMap != null) {
+                List<String> reccomend = new ArrayList<String>();
+
+                List<Movie> myMovieListR = new ArrayList<>(deepCopy(moviesPage.getMovieListNoCountry(login.getUserLoggedIn().getCountry())));
+                List<Movie> movieListHelper = new ArrayList<>();
+                for (Movie mv : myMovieListR) {
+                    for (Notification nt : myNotList) {
+                        if (!mv.getName().equals(nt.getMovieName())) {
+                            movieListHelper.add(mv);
+                        }
+                    }
+                }
+                for (Movie movie : movieListHelper) {
+                    for (String genre : movie.getGenres()) {
+
+                        if (genre.equals(sortedMap.entrySet().iterator().next().getKey()) && !login.isInPurchased(movie.getName())) {
+
+                            reccomend.add(movie.getName());
+                        }
+                    }
+                }
+                for (String str : reccomend) {
+                    myNotList.add(new Notification(str, "Recommendation"));
+                }
+            }
+            if(myNotList.size() == 0) {
+                Notification myNot = new Notification("No recommendation", "Recommendation");
+                myNotList.add(myNot);
+            }
             output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
                     login.getUserLoggedIn().getTokensCount(),
                     login.getUserLoggedIn().getNumFreePremiumMovies(),
@@ -631,8 +737,21 @@ public final class ProgramWorkflow {
                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
-                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
+                new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies())),
+                new ArrayList<>(deepCopyNotification(login.getUserLoggedIn().getNotifications()))));
         //adaug la lista mea de output
         listToPrint.add(output);
+    }
+
+    public void buyPremiumAccount(Login login) {
+        if (login.getUserLoggedIn().getTokensCount() >= 10) {
+                        //setez in login
+                        login.getUserLoggedIn().setTokensCount(
+                                login.getUserLoggedIn().getTokensCount() - 10);
+                        login.getUserLoggedIn().setAccountType("premium");
+                        //setez in database
+                        dataBase.findUserByUsername(
+                                login.getUserLoggedIn().getName()).setAccountType("premium");
+                    }
     }
 }

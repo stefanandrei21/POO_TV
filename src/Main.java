@@ -9,13 +9,21 @@ import java.util.List;
  * Main class de aici incep implementarea
  */
 public class Main {
+    /**
+     *
+     */
+    private Main() { }
 
-    public Main() { }
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(final String[] args) throws IOException {
         //creez un input loader
         InputLoader inputLoader = new InputLoader();
         //test manual
-      // inputLoader.init("D:\\POO_TV\\checker\\resources\\in\\basic_4.json");
+      // inputLoader.init("D:\\POO_TV\\checker\\resources\\in\\basic_5.json");
        inputLoader.init(args[0]);
         // retin elementele din input loader in baza mea de date
         DataBase input = inputLoader.readData();

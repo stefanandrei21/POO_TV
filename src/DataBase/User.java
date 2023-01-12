@@ -1,6 +1,5 @@
 package DataBase;
 
-import java.util.Objects;
 
 public class User {
     private String name;
@@ -34,29 +33,6 @@ public class User {
         this.accountType = user.accountType;
     }
 
-    /**
-     * ovver ride equals
-     * @return
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof User user)) {
-            return false;
-        }
-        return getName().equals(user.getName());
-    }
-
-    /**
-     * override hashcode
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName());
-    }
 
     /**
      * verific daca user este logat

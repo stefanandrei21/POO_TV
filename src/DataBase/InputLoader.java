@@ -170,7 +170,7 @@ public final class InputLoader {
                     accountType = (String) jsonCredentials.get("accountType");
                     if ((String) (jsonCredentials.get("balance")) != null) {
                         String balanceAux = (String) (jsonCredentials.get("balance"));
-                        balance = Integer.parseInt(balanceAux);;
+                        balance = Integer.parseInt(balanceAux);
                     }
                     userFromActions.setBalance(balance);
                     userFromActions.setCountry(country);
@@ -206,7 +206,8 @@ public final class InputLoader {
                         }
                     }
                 }
-                JSONObject jsonAddedMovie = ((JSONObject) ((JSONObject) jsonAction).get("addedMovie"));
+                JSONObject jsonAddedMovie = ((JSONObject) ((JSONObject) jsonAction).
+                        get("addedMovie"));
                 List<String> countriesForMovie = new ArrayList<String>();
                 String nameOfMovie = null;
                 String yearOfMovie = null;

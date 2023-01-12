@@ -16,7 +16,7 @@ public final class Output {
         this.currentMovieList = new ArrayList<>();
         this.currentUser = null;
     }
-    public Output(String rand) {
+    public Output(final String rand) {
         this.error = null;
         this.currentMovieList = null;
         this.currentUser = null;

@@ -66,9 +66,11 @@ public final class Actions {
         this.genre = genre;
         this.movie = movie;
         this.count = count;
-        if(rate != null)
+        if (rate != null) {
             this.rate = Integer.valueOf(rate);
-        else this.rate = 0;
+        } else {
+            this.rate = 0;
+        }
         this.countriesBanned = countriesBanned;
         this.durationOfMovie = durationOfMovie;
         this.nameOfMovie = nameOfMovie;
@@ -100,6 +102,26 @@ public final class Actions {
         this.nameOfMovie = nameOfMovie;
         this.yearOfMovie = yearOfMovie;
         this.subscribedGenre = subscribedGenre;
+    }
+
+    public List<String> getCountriesBanned() {
+        return countriesBanned;
+    }
+
+    public Integer getDurationOfMovie() {
+        return durationOfMovie;
+    }
+
+    public String getNameOfMovie() {
+        return nameOfMovie;
+    }
+
+    public String getYearOfMovie() {
+        return yearOfMovie;
+    }
+
+    public String getSubscribedGenre() {
+        return subscribedGenre;
     }
 
     public Integer getRate() {

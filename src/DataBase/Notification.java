@@ -1,14 +1,15 @@
 package DataBase;
 
-public class Notification {
-    private String movieName;
-    private String message;
 
-    public Notification(String movieName, String message) {
+public final class Notification {
+    private final String movieName;
+    private final String message;
+
+    public Notification(final String movieName, final String message) {
         this.movieName = movieName;
         this.message = message;
     }
-    public Notification(Notification notification) {
+    public Notification(final Notification notification) {
         this.movieName = notification.getMovieName();
         this.message = notification.getMessage();
     }
@@ -17,15 +18,14 @@ public class Notification {
         return movieName;
     }
 
-    public void setMovieName(final String movieName) {
-        this.movieName = movieName;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(final String message) {
-        this.message = message;
+    @Override
+    public String toString() {
+        return "Notification{" + "movieName='" + movieName + '\''
+                + ", message='" + message + '\''
+                + '}';
     }
 }

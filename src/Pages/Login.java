@@ -86,7 +86,12 @@ public final class Login extends Page {
         return null;
     }
 
-    public boolean IsInPurchased(final String movie) {
+    /**
+     *
+     * @param movie
+     * @return
+     */
+    public boolean isInPurchased(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getPurchasedMovies()) {
             if (goMovie.getName().equals(movie)) {
                 return true;
@@ -110,6 +115,11 @@ public final class Login extends Page {
         return false;
     }
 
+    /**
+     *
+     * @param movie
+     * @return
+     */
     public boolean ifRated(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getRatedMovies()) {
             if (goMovie.getName().equals(movie)) {
@@ -120,16 +130,16 @@ public final class Login extends Page {
         return false;
     }
 
-    public List<Movie> updateWatchedMl(List<Movie> moviesInDatabase) {
+    /**
+     *
+     * @param moviesInDatabase
+     * @return
+     */
+    public List<Movie> updateWatchedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
-        //iau pe rand fiecare film din lista
-        //verific daca este in database
-        //daca este il pun in lista
-
-
-        for(Movie movie : userLoggedIn.getWatchedMovies()) {
-            for(Movie movieInD : moviesInDatabase) {
-                if(movie.getName().equals(movieInD.getName())) {
+        for (Movie movie : userLoggedIn.getWatchedMovies()) {
+            for (Movie movieInD : moviesInDatabase) {
+                if (movie.getName().equals(movieInD.getName())) {
                     movieList.add(movieInD);
                 }
             }
@@ -137,48 +147,50 @@ public final class Login extends Page {
         return movieList;
     }
 
-    public List<Movie> updatePurchasedMl(List<Movie> moviesInDatabase) {
+    /**
+     *
+     * @param moviesInDatabase
+     * @return
+     */
+    public List<Movie> updatePurchasedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
-        //iau pe rand fiecare film din lista
-        //verific daca este in database
-        //daca este il pun in lista
-
-
-        for(Movie movie : userLoggedIn.getPurchasedMovies()) {
-            for(Movie movieInD : moviesInDatabase) {
-                if(movie.getName().equals(movieInD.getName())) {
+        for (Movie movie : userLoggedIn.getPurchasedMovies()) {
+            for (Movie movieInD : moviesInDatabase) {
+                if (movie.getName().equals(movieInD.getName())) {
                     movieList.add(movieInD);
                 }
             }
         }
         return movieList;
     }
-    public List<Movie> updateRatedMl(List<Movie> moviesInDatabase) {
+
+    /**
+     *
+     * @param moviesInDatabase
+     * @return
+     */
+    public List<Movie> updateRatedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
-        //iau pe rand fiecare film din lista
-        //verific daca este in database
-        //daca este il pun in lista
-
-
-        for(Movie movie : userLoggedIn.getRatedMovies()) {
-            for(Movie movieInD : moviesInDatabase) {
-                if(movie.getName().equals(movieInD.getName())) {
+        for (Movie movie : userLoggedIn.getRatedMovies()) {
+            for (Movie movieInD : moviesInDatabase) {
+                if (movie.getName().equals(movieInD.getName())) {
                     movieList.add(movieInD);
                 }
             }
         }
         return movieList;
     }
-    public List<Movie> updateLikedMl(List<Movie> moviesInDatabase) {
+
+    /**
+     *
+     * @param moviesInDatabase
+     * @return
+     */
+    public List<Movie> updateLikedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
-        //iau pe rand fiecare film din lista
-        //verific daca este in database
-        //daca este il pun in lista
-
-
-        for(Movie movie : userLoggedIn.getLikedMovies()) {
-            for(Movie movieInD : moviesInDatabase) {
-                if(movie.getName().equals(movieInD.getName())) {
+        for (Movie movie : userLoggedIn.getLikedMovies()) {
+            for (Movie movieInD : moviesInDatabase) {
+                if (movie.getName().equals(movieInD.getName())) {
                     movieList.add(movieInD);
                 }
             }
