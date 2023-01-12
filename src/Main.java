@@ -15,8 +15,8 @@ public class Main {
         //creez un input loader
         InputLoader inputLoader = new InputLoader();
         //test manual
-        inputLoader.init("D:\\POO_TV\\checker\\resources\\in\\basic_4.json");
-      //  inputLoader.init(args[0]);
+      // inputLoader.init("D:\\POO_TV\\checker\\resources\\in\\basic_4.json");
+       inputLoader.init(args[0]);
         // retin elementele din input loader in baza mea de date
         DataBase input = inputLoader.readData();
         //instantiez clasa unde am logica principala a programului

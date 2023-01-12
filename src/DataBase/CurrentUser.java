@@ -14,7 +14,7 @@ public final class CurrentUser extends User {
     private List<Movie> watchedMovies = new ArrayList<>();
     private List<Movie> likedMovies = new ArrayList<>();
     private List<Movie> ratedMovies = new ArrayList<>();
-    private List<Movie> notifications = new ArrayList<>();
+    private List<Notification> notifications = new ArrayList<>();
     Map<String, Integer> rememberRated = new HashMap<>();
     public CurrentUser(final int tokensCount, final int numFreePremiumMovies,
                        final List<Movie>  purchasedMovies,
@@ -26,6 +26,7 @@ public final class CurrentUser extends User {
         this.watchedMovies = watchedMovies;
         this.likedMovies = likedMovies;
         this.ratedMovies = ratedMovies;
+
     }
 
     public CurrentUser() { };
@@ -38,6 +39,7 @@ public final class CurrentUser extends User {
         this.watchedMovies = new ArrayList<>();
         this.likedMovies = new ArrayList<>();
         this.ratedMovies = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
 
@@ -54,6 +56,22 @@ public final class CurrentUser extends User {
         this.likedMovies = likedMovies;
         this.ratedMovies = ratedMovies;
     }
+    public CurrentUser(final User user, final Integer tokensCount,
+                       final Integer numFreePremiumMovies,
+                       final List<Movie>  purchasedMovies, final List<Movie>  watchedMovies,
+                       final List<Movie>  likedMovies, final List<Movie>  ratedMovies,
+                       final List<Notification> notificantions) {
+        super(user);
+        this.tokensCount = tokensCount;
+        this.numFreePremiumMovies = numFreePremiumMovies;
+        this.purchasedMovies = purchasedMovies;
+        this.watchedMovies = watchedMovies;
+        this.likedMovies = likedMovies;
+        this.ratedMovies = ratedMovies;
+        this.notifications = notificantions;
+    }
+
+
 
     public Map<String, Integer> getRememberRated() {
         return rememberRated;
@@ -63,7 +81,11 @@ public final class CurrentUser extends User {
         this.rememberRated = rememberRated;
     }
 
-    public List<Movie>  getNotifications() {
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public List<Notification>  getNotifications() {
         return notifications;
     }
 

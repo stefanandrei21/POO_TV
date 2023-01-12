@@ -6,7 +6,7 @@ import java.util.List;
 
 public final class Output {
     private String error;
-    private List<Movie> currentMovieList = new ArrayList<>();
+    private List<Movie> currentMovieList;
     private CurrentUser currentUser = new CurrentUser();
 
 
@@ -16,6 +16,12 @@ public final class Output {
         this.currentMovieList = new ArrayList<>();
         this.currentUser = null;
     }
+    public Output(String rand) {
+        this.error = null;
+        this.currentMovieList = null;
+        this.currentUser = null;
+    }
+
 
     public Output(final String error, final List<Movie> currentMovieList,
                   final CurrentUser currentUser) {

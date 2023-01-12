@@ -3,6 +3,7 @@ import DataBase.CurrentUser;
 import DataBase.Movie;
 import DataBase.User;
 import DataBase.Actions;
+import DataBase.Notification;
 import Pages.Page;
 import Pages.UpgradesPage;
 import Pages.SeeDetailsPage;
@@ -42,11 +43,12 @@ public final class ProgramWorkflow {
         UpgradesPage upgradesPage = new UpgradesPage("UpgradesPage");
         SeeDetailsPage seeDetailsPage = new SeeDetailsPage("seeDetailsPage");
         Page currentPage = homePage;
-
+        int i = 0;
         //incep sa trec prin lista mea de actiuni
         List<Output> listToPrint = new ArrayList<Output>();
         for (Actions action : dataBase.getActions()) {
          //   System.out.println(action);
+            i++;
             Output output = new Output();
             List<Movie> purchasedMovieList;
             register = 1;
@@ -378,7 +380,7 @@ public final class ProgramWorkflow {
                     if(login.getUserLoggedIn().getName().equals("Mihail")) {
                         int x = 0;
                     }
-                    if(login.ifWatched(seeDetailsPage.getSeeDetailsToMovie().getName()) != true) {
+                    if(!login.ifWatched(seeDetailsPage.getSeeDetailsToMovie().getName())) {
                         if (login.checkIfMovieIsInPurchased(
                                 seeDetailsPage.getSeeDetailsToMovie().getName()) != null) {
                             //setez in login si setez si in database
@@ -445,11 +447,12 @@ public final class ProgramWorkflow {
                     Movie rateMovie = login.checkIfMovieIsInPurchased(
                             seeDetailsPage.getSeeDetailsToMovie().getName());
                     if(login.ifRated(rateMovie.getName())) {
+                        Output out2 = new Output();
                         List<Movie> ratedM = new ArrayList<Movie>();
                         ratedM.add(seeDetailsPage.getSeeDetailsToMovie());
                         //setez si la output
-                        output.setCurrentMovieList(deepCopy(ratedM));
-                        output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                        out2.setCurrentMovieList(deepCopy(ratedM));
+                        out2.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
                                 login.getUserLoggedIn().getTokensCount(),
                                 login.getUserLoggedIn().getNumFreePremiumMovies(),
                                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
@@ -457,25 +460,25 @@ public final class ProgramWorkflow {
                                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
                                 new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies()))));
 
-                        listToPrint.add(output);
+                        listToPrint.add(out2);
                         Integer numRatings = rateMovie.getNumRatings();
                         Double ratioRating = rateMovie.getRating();
-                        System.out.println("Ratio Rating initial = " + ratioRating);
-                        System.out.println("Numar rating initial = " + numRatings);
+
                         Double aux = numRatings * ratioRating;
-                        System.out.println("suma initiala = " + aux );
+
                         Double newSum = aux + action.getRate();
                         Double update = newSum - login.getUserLoggedIn().getRememberRated().get(rateMovie.getName());
-                        System.out.println("suma noua = " + newSum);
-                        System.out.println(update);
+
                         Double newRating = update / numRatings;
-//                        System.out.println(newSumRating);
-//                        System.out.println(numRatings);
+
                         rateMovie.setRating(newRating);
                         dataBase.findMovieByUsername(
                                 rateMovie.getName()).setRating(rateMovie.getRating());
                         List<Movie> nratedM = new ArrayList<Movie>();
-                        nratedM.add(seeDetailsPage.getSeeDetailsToMovie());
+
+                        nratedM.add(dataBase.findMovieByUsername(
+                                rateMovie.getName()));
+                        System.out.println(nratedM);
                         //setez si la output
                         output.setCurrentMovieList(deepCopy(nratedM));
                         output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
@@ -541,15 +544,38 @@ public final class ProgramWorkflow {
                     currentPage = moviesPage;
 
                     chPgMovies(currentPage, moviesPage, login, output, listToPrint);
-                    System.out.println(moviesPage.getMovieList());
+
                 }
             }
+          //  System.out.println(dataBase.getActions().size() + " " + i);
+
+
 
 
             if (output.getError() != null) {
                 listToPrint.add(output);
             }
 
+        }
+        if (login.getUserLoggedIn().getAccountType().equals("premium")) {
+            // System.out.println("aiciestei" + i);
+            System.out.println("da");
+            Output output = new Output("da");
+            Notification myNot = new Notification("No recommendation", "Recommendation");
+            List<Notification> myNotList = new ArrayList<Notification>();
+            myNotList.add(myNot);
+//            List<Movie> ml = null;
+//            output.setCurrentMovieList(ml);
+            output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
+                    login.getUserLoggedIn().getTokensCount(),
+                    login.getUserLoggedIn().getNumFreePremiumMovies(),
+                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getPurchasedMovies())),
+                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getWatchedMovies())),
+                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getLikedMovies())),
+                    new ArrayList<>(deepCopy(login.getUserLoggedIn().getRatedMovies())),
+                    new ArrayList<>(deepCopyNotification(myNotList))));
+
+            listToPrint.add(output);
         }
         return listToPrint;
     }
@@ -571,6 +597,18 @@ public final class ProgramWorkflow {
         return new ArrayList<>();
     }
 
+    public static List<Notification> deepCopyNotification(final List<Notification> notifications) {
+        if (notifications != null) {
+            List<Notification> copiedNotifications = new ArrayList<>();
+            for (Notification notification : notifications) {
+                copiedNotifications.add(new Notification(notification));
+            }
+            return copiedNotifications;
+        }
+        return new ArrayList<>();
+    }
+
+
     public static Output setOutput() {
         Output output = new Output();
 
@@ -583,11 +621,10 @@ public final class ProgramWorkflow {
         login.setLoggedInMovieList(moviesPage.getMovieListNoCountry(
                 login.getUserLoggedIn().getCountry()));
 
-        System.out.println(login.getUserLoggedIn().getPassword());
-        System.out.println(login.getLoggedInMovieList());
+
         //setez output
         output.setCurrentMovieList(deepCopy(login.getLoggedInMovieList()));
-        System.out.println(output.getCurrentMovieList());
+
         output.setCurrentUser(new CurrentUser(login.getUserLoggedIn(),
                 login.getUserLoggedIn().getTokensCount(),
                 login.getUserLoggedIn().getNumFreePremiumMovies(),
