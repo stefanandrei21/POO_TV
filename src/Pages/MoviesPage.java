@@ -21,8 +21,8 @@ public final class MoviesPage extends Page {
 
     /**
      * returnez lista fara tara care este banata
-     * @param country
-     * @return
+     * @param country tara pe care o caut sa verific
+     * @return Lista fara tara respectiva
      */
     public List<Movie> getMovieListNoCountry(final String country) {
         List<Movie> movieListNoBannedCountry = new ArrayList<Movie>();

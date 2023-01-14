@@ -25,9 +25,9 @@ public final class DataBase {
 
     /**
      * initializare
-     * @param myUserList
-     * @param myMovieList
-     * @param myActions
+     * @param myUserList lista de utilizatori primita la citire
+     * @param myMovieList lista de filme primita la citire
+     * @param myActions lista de actiuni primita la citire
      */
     public void init(final List<CurrentUser> myUserList, final List<Movie> myMovieList,
                      final List<Actions> myActions) {
@@ -37,11 +37,10 @@ public final class DataBase {
     }
 
     /**
-     *
-     * @param name
-     * returneaza un utilizator pe care il gaseste intr o lista
-     * de utilizatori
-     * @return
+     *returneaza un utilizator pe care il gaseste intr o lista
+     *      * de utilizatori
+     * @param name numele utilizatorului care este cautat
+     * @return utilizatorul gasit
      */
     public CurrentUser findUserByUsername(final String name) {
         for (CurrentUser user : userList) {
@@ -55,8 +54,8 @@ public final class DataBase {
     /**
      * returneaza un film gasit in movieList cautat dupa numele
      * acestuia
-     * @param name
-     * @return
+     * @param name numele filmului care este cautat
+     * @return filmul
      */
     public Movie findMovieByUsername(final String name) {
         for (Movie mov : this.movieList) {
@@ -69,7 +68,7 @@ public final class DataBase {
 
     /**
      *  adauga un user intr o lista de Current useri
-     * @param user
+     * @param user Userul de adaugat
      */
     public void addUser(final CurrentUser user) {
         userList.add(user);

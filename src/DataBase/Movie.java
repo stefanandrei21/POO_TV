@@ -69,8 +69,8 @@ public final class Movie {
 
     /**
      * verifica daca contine actorul in lista de actori
-     * @param cntActors
-     * @return
+     * @param cntActors actorul pe care il verific
+     * @return true sau false in functie daca il contine sau nu
      */
     public boolean containsActors(final List<String> cntActors) {
         return this.actors.containsAll(cntActors);
@@ -78,8 +78,8 @@ public final class Movie {
 
     /**
      * verifica daca contine genul
-     * @param genre
-     * @return
+     * @param genre genul pe care il verific
+     * @return true sau false in funcite daca il contine sau nu
      */
     public boolean containsGenre(final List<String> genre) {
         return this.genres.containsAll(genre);

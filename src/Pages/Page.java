@@ -11,7 +11,7 @@ public class Page {
 
     /**
      * getter pt titlu
-     * @return
+     * @return titlu
      */
     public String getTitle() {
         return title;
@@ -19,7 +19,7 @@ public class Page {
 
     /**
      * setter pt titlu
-     * @param title
+     * @param title titlu
      */
     public void setTitle(final String title) {
         this.title = title;
@@ -27,7 +27,6 @@ public class Page {
 
     /**
      * to string override method
-     * @return
      */
     @Override
     public String toString() {

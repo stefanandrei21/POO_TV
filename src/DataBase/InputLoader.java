@@ -30,7 +30,8 @@ public final class InputLoader {
      *  incep citirea din fisiere
      *  si iau arrayuri de User
      *  Movies si actions
-     * @return
+     * @return databese ul pe care l-am creat cu actiuni,
+     * filme, utilizatori
      */
     public DataBase readData() {
         JSONParser jsonParser = new JSONParser();
@@ -61,8 +62,8 @@ public final class InputLoader {
 
     /**
      *  citesc Arrayul de user
-     * @param jsonUserList
-     * @return
+     * @param jsonUserList arrayul pe care il am de parcurs
+     * @return o lista cu userii
      */
     public List<CurrentUser> readUser(final JSONArray jsonUserList) {
         List<CurrentUser> userList = new ArrayList<CurrentUser>();
@@ -84,9 +85,9 @@ public final class InputLoader {
     }
 
     /**
-     * Citesc Jsonarrayul de movies
-     * @param jsonMovieList
-     * @return
+     * Citesc Json arrayul de movies
+     * @param jsonMovieList array ul de Movies
+     * @return Lista de filme creeata
      */
 
     public List<Movie> readMovie(final JSONArray jsonMovieList) {
@@ -129,8 +130,8 @@ public final class InputLoader {
 
     /**
      *  citesc json arrayul de actiuni
-     * @param jsonActionsList
-     * @return
+     * @param jsonActionsList arrayul json de citit
+     * @return lista de actiuni
      */
     public List<Actions> readActions(final JSONArray jsonActionsList) {
         List<Actions> actionsList = new ArrayList<Actions>();
@@ -142,11 +143,6 @@ public final class InputLoader {
                 String countStr = (String) ((JSONObject) jsonAction).get("count");
                 String subscribedGenre = (String) ((JSONObject) jsonAction).get("subscribedGenre");
                 String rate = (String) ((JSONObject) jsonAction).get("rate");
-               // Integer rate = 0;
-//                if (auxRate != null) {
-//                    rate = auxRate.intValue();
-//                }
-
                 Integer count = 0;
                 if (countStr != null) {
                     count = Integer.parseInt(countStr);

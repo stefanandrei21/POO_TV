@@ -34,7 +34,7 @@ public final class ProgramWorkflow {
     /**
      * metoda pentru functionarea temei
      *
-     * @return
+     * @return o lista de outputuri
      */
     public List<Output>  work() {
         int register = 1;
@@ -272,8 +272,8 @@ public final class ProgramWorkflow {
     /**
      * deep Copy function for creating
      * the output
-     * @param movies
-     * @return
+     * @param movies lista de filme
+     * @return lista de filme deep copyed
      */
     public static List<Movie> deepCopy(final List<Movie> movies) {
         if (movies != null) {
@@ -287,9 +287,9 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param notifications
-     * @return
+     * fac deepcopy la o lista de notificari
+     * @param notifications lista de clasa notificari
+     * @return acelasi array deep copyed
      */
     public static List<Notification> deepCopyNotification(final List<Notification> notifications) {
         if (notifications != null) {
@@ -305,12 +305,13 @@ public final class ProgramWorkflow {
 
 
     /**
-     *
-     * @param currentPage
-     * @param moviesPage
-     * @param login
-     * @param output
-     * @param listToPrint
+     * schimbare pagina pe movies,setez lista logata de filme(fara tara
+     * daca este banata)
+     * @param currentPage pagina curenta pe care ma afflu
+     * @param moviesPage pagina cu filmele, aici tin toate filmele
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param output output
+     * @param listToPrint lista de outputuri
      */
     public void chPgMovies(final Page currentPage, final MoviesPage moviesPage,
                            final Login login, final Output output, final List<Output> listToPrint) {
@@ -325,8 +326,8 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
+     *  cumparare cont premium, verific daca am tokeni apoi cumpar
+     * @param login pagina de login, aici este utilizatorul logat
      */
     public void buyPremiumAccount(final Login login) {
         if (login.getUserLoggedIn().getTokensCount() >= Constants.BUY_PREMIUM_ACC) {
@@ -341,11 +342,13 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param seeDetailsPage
-     * @param output
-     * @param listToPrint
+     * cumparare film, verific daca filmul nu este deja cumparat,
+     * verific ce tip de cont am, si apoi cumpar sau nu in functie
+     * de asta
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param seeDetailsPage pagina de see details, aici am filmul
+     * @param output outputul
+     * @param listToPrint lista de output uri
      */
     public void buyMovie(final Login login, final SeeDetailsPage seeDetailsPage,
                          final Output output, final List<Output> listToPrint) {
@@ -401,11 +404,11 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param seeDetailsPage
-     * @param output
-     * @param listToPrint
+     * metoda pentru a vedea un film, verific daca utilizatorul a cumparat
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param seeDetailsPage pagina de see details, aici am filmul
+     * @param output outputul
+     * @param listToPrint lista de output uri
      */
     public void watchAmovie(final Login login, final SeeDetailsPage seeDetailsPage,
                             final Output output, final List<Output> listToPrint) {
@@ -433,11 +436,12 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param seeDetailsPage
-     * @param output
-     * @param listToPrint
+     * metoda pentru a da like unui film, verific daca filmul a fost cumparat,
+     * vazut
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param seeDetailsPage pagina de see details, aici am filmul
+     * @param output outputul
+     * @param listToPrint lista de outputuri
      */
     public void likeAmovie(final Login login, final SeeDetailsPage seeDetailsPage,
                            final Output output, final List<Output> listToPrint) {
@@ -465,12 +469,13 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param seeDetailsPage
-     * @param output
-     * @param listToPrint
-     * @param action
+     * metoda pentru a da rate unui film, verific daca utilizatorul
+     * a dat deja rate, daca a dat fac override la rate
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param seeDetailsPage pagina de see details, aici am filmul
+     * @param output outputul
+     * @param listToPrint lista de outputuri
+     * @param action lista de actiuni
      */
     public void rateAmovie(final Login login, final SeeDetailsPage seeDetailsPage,
                            final Output output, final List<Output> listToPrint,
@@ -545,23 +550,23 @@ public final class ProgramWorkflow {
 
     /**
      *
-     * @param login
-     * @param seeDetailsPage
-     * @param output
-     * @param action
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param seeDetailsPage pagina de see details, aici am filmul
+     * @param output outputul pe care il creez
+     * @param action actiunea la care sunt, din lista mea de actiuni
      */
     public void subscribeToGenre(final Login login, final SeeDetailsPage seeDetailsPage,
                                  final Output output, final Actions action) {
-        boolean okish = false;
+        boolean ok = false;
         for (String str : login.getUserLoggedIn().getSubscribed()) {
             if (action.getSubscribedGenre().equals(str)) {
-                okish = true;
+                ok = true;
                 break;
             }
         }
         if (seeDetailsPage.getSeeDetailsToMovie() == null) {
             output.setError("Error");
-        } else if (okish) {
+        } else if (ok) {
             output.setError("Error");
         } else {
             boolean verifyGenre = false;
@@ -578,9 +583,10 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param action
+     * adaug un film in database, verific daca filmul nu este deja
+     * apoi adaug
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param action actiunea la care sunt, din lista mea de actiuni
      */
     public void addToDataBase(final Login login, final Actions action) {
         if (action.getFeature().equals("add")) {
@@ -603,17 +609,19 @@ public final class ProgramWorkflow {
 
                 Notification notif = new Notification(addNewMovie.getName(), "ADD");
                 login.getUserLoggedIn().getNotifications().add(notif);
-                System.out.println(login.getUserLoggedIn().getNotifications());
 
             }
         }
     }
 
     /**
-     *
-     * @param login
-     * @param moviesPage
-     * @param listToPrint
+     *  metoda pentru a notifica utilizator ul la finalul actiunilor
+     *  verific daca filmul este deja recomandat nu il mai recomand,
+     *  cu ajutorul mapei in current user vad care este cel mai likeuit
+     *  film sortand mapa
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param moviesPage pagina cu filmele, aici tin toate filmele
+     * @param listToPrint lista pe care o printez
      */
     public void subscribedUserNotification(final Login login, final MoviesPage moviesPage,
                                            final List<Output> listToPrint) {
@@ -635,6 +643,8 @@ public final class ProgramWorkflow {
                 }
             }
         }
+        // comparator pentru a sorta mapa pe care o sa o creez
+        //pentru a vedea care este cel mai likeuit film
         Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(final String o1, final String o2) {
@@ -690,9 +700,9 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param action
+     * cumpar tokeni in functie daca am balanta sau nu
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param action actiunea la care sunt, din lista mea de actiuni
      */
     public void buyTokens(final Login login, final Actions action) {
         if (action.getCount() <= login.getUserLoggedIn().getBalance()) {
@@ -713,12 +723,12 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param moviesPage
-     * @param output
-     * @param listToPrint
-     * @param action
+     *  filtrez filmele in functie de inputul primit
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param moviesPage pagina cu filmele, aici tin toate filmele
+     * @param output outputul pe care il creez
+     * @param listToPrint lista mea de outputuri
+     * @param action actiunea la care sunt, din lista mea de actiuni
      */
     public void filterMovieList(final Login login, final MoviesPage moviesPage,
                                 final Output output, final List<Output> listToPrint,
@@ -756,11 +766,12 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
-     * @param output
-     * @param listToPrint
-     * @param action
+     *  Metoda pentru cautarea unui film,
+     *  se verifica daca exista filmul si daca tara nu este banata
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param output outputul pe care il creez
+     * @param listToPrint lista mea de outputuri
+     * @param action actiunea la care sunt, din lista mea de actiuni
      */
     public void searchMovie(final Login login, final Output output,
                             final List<Output> listToPrint, final Actions action) {
@@ -789,11 +800,11 @@ public final class ProgramWorkflow {
         listToPrint.add(output);
     }
     /**
-     *
-     * @param login
-     * @param output
-     * @param listToPrint
-     * @param helpMovie
+     *  Setez Outputul
+     * @param login pagina de login, aici este utilizatorul logat
+     * @param output outputul pe care il creez
+     * @param listToPrint lista mea de outputuri
+     * @param helpMovie filmpul pe care il setez la output
      */
     public void setOutput(final Login login, final Output output,
                           final List<Output> listToPrint, final List<Movie> helpMovie) {
@@ -811,8 +822,10 @@ public final class ProgramWorkflow {
     }
 
     /**
-     *
-     * @param login
+     * fac update la filme in caz in care un utilizator este
+     * nelogat dar se fac schimbari de likeuri etc la filmele
+     * respective
+     * @param login pagina de login, aici este utilizatorul logat
      */
     public void updateLoggedInUser(final Login login) {
         login.getUserLoggedIn().setPurchasedMovies(login.updatePurchasedMl(dataBase.

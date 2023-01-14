@@ -32,7 +32,7 @@ public final class Output {
 
     /**
      * getter si setter pt eroare
-     * @return
+     * @return eroarea
      */
     public String getError() {
         return error;
@@ -44,7 +44,7 @@ public final class Output {
 
     /**
      * getter si setter pt CurrentMovieList
-     * @return
+     * @return lista curenta de filme
      */
     public List<Movie> getCurrentMovieList() {
         return currentMovieList;
@@ -56,7 +56,7 @@ public final class Output {
 
     /**
      * getter si setter pt current user
-     * @return
+     * @return current user
      */
     public CurrentUser getCurrentUser() {
         return currentUser;

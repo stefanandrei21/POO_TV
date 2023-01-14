@@ -30,8 +30,8 @@ public final class Login extends Page {
     /**
      * Sorteaza filmele in caz ca actiunea este filter
      * override compare
-     * @param duration
-     * @param rating
+     * @param duration durata descendet sau ascendent in funcite de input
+     * @param rating ratia descendent sau ascendent in functie de input
      */
     public void sortByDuration(final String duration, final String rating) {
         Collections.sort(this.loggedInMovieList, new Comparator<Movie>() {
@@ -73,8 +73,8 @@ public final class Login extends Page {
 
     /**
      * verifica daca un film este cumparat si il returneaza
-     * @param movie
-     * @return
+     * @param movie numele filmului pe care il verific
+     * @return filmul
      */
     public Movie checkIfMovieIsInPurchased(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getPurchasedMovies()) {
@@ -87,9 +87,10 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param movie
-     * @return
+     *  verific daca un film este cumparat
+     *  dar nu il returnez, ci returnez false sau true
+     * @param movie numele filmului
+     * @return false/ture
      */
     public boolean isInPurchased(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getPurchasedMovies()) {
@@ -102,8 +103,8 @@ public final class Login extends Page {
     }
     /**
      * verifica daca un film este vazut
-     * @param movie
-     * @return
+     * @param movie numele filmului pe care il verific
+     * @return true/false
      */
     public boolean ifWatched(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getWatchedMovies()) {
@@ -116,9 +117,9 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param movie
-     * @return
+     * verific daca un film are rate sau nu
+     * @param movie numele filmului pe care il verific
+     * @return true/false
      */
     public boolean ifRated(final String movie) {
         for (Movie goMovie : this.userLoggedIn.getRatedMovies()) {
@@ -131,9 +132,10 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param moviesInDatabase
-     * @return
+     *  Metoda pentru a updata lista de filme vazute, in caz in care
+     *  un utilizator se relocheaza
+     * @param moviesInDatabase lista de filme din baza de date
+     * @return lista de filme noua
      */
     public List<Movie> updateWatchedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
@@ -148,9 +150,10 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param moviesInDatabase
-     * @return
+     *  Metoda pentru a updata lista de filme cumparate, in caz in care
+     *  un utilizator se relocheaza
+     * @param moviesInDatabase lista de filme din baza de date
+     * @return lista de filme updatata
      */
     public List<Movie> updatePurchasedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
@@ -165,9 +168,10 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param moviesInDatabase
-     * @return
+     *  Metoda pentru a updata lista de filme rated, in caz in care
+     *  un utilizator se relocheaza
+     * @param moviesInDatabase lista de filme din baza de date
+     * @return lista de filme updatata
      */
     public List<Movie> updateRatedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
@@ -182,9 +186,10 @@ public final class Login extends Page {
     }
 
     /**
-     *
-     * @param moviesInDatabase
-     * @return
+     *  Metoda pentru a updata lista de filme liked, in caz in care
+     *  un utilizator se relocheaza
+     * @param moviesInDatabase lista de filme din baza de date
+     * @return lista de filme updatata
      */
     public List<Movie> updateLikedMl(final List<Movie> moviesInDatabase) {
         List<Movie> movieList = new ArrayList<Movie>();
@@ -200,7 +205,8 @@ public final class Login extends Page {
 
     /**
      * getter si setter pt MovieList
-     * @return
+     * @return lista de filme fara tara utilizatorului
+     * in caz in care este banata
      */
     public List<Movie> getLoggedInMovieList() {
         return loggedInMovieList;
@@ -212,7 +218,7 @@ public final class Login extends Page {
 
     /**
      * getter si setter pt userul logat
-     * @CurrentUser
+     * @CurrentUser userul curent
      */
     public CurrentUser getUserLoggedIn() {
         return userLoggedIn;
@@ -225,8 +231,8 @@ public final class Login extends Page {
     /**
      * verific credentialele si daca este
      * in lista mea de utilizatori return true
-     * @param userList
-     * @return
+     * @param userList Lista de utilizatoru din baza de date
+     * @return true/false in functie daca este sau nu in baza mea de date
      */
     public boolean verifyCredentials(final List<CurrentUser> userList) {
        for (User user : userList) {

@@ -36,7 +36,7 @@ public class User {
 
     /**
      * verific daca user este logat
-     * @return
+     * @return userul logat
      */
     public boolean isLoggedIn() {
         return loggedIn;
@@ -44,7 +44,6 @@ public class User {
 
     /**
      * setez user logat
-     * @return
      */
     public void setLoggedIn(final boolean loggedIn) {
         this.loggedIn = loggedIn;
@@ -52,7 +51,7 @@ public class User {
 
     /**
      * getter pt nume
-     * @return
+     * @return nume
      */
     public String getName() {
         return name;
@@ -60,7 +59,6 @@ public class User {
 
     /**
      * seter pt nume
-     * @return
      */
     public void setName(final String name) {
         this.name = name;
@@ -68,7 +66,7 @@ public class User {
 
     /**
      * getter pt parola
-     * @return
+     * @return parola
      */
     public String getPassword() {
         return password;
@@ -76,7 +74,6 @@ public class User {
 
     /**
      * setter pt parola
-     * @return
      */
     public void setPassword(final String password) {
         this.password = password;
@@ -84,7 +81,7 @@ public class User {
 
     /**
      * getter pt account type
-     * @return
+     * @return tipul contului
      */
     public String getAccountType() {
         return accountType;
@@ -92,7 +89,6 @@ public class User {
 
     /**
      * setter pt account type
-     * @return
      */
     public void setAccountType(final String accountType) {
         this.accountType = accountType;
@@ -100,7 +96,7 @@ public class User {
 
     /**
      * getter pt country
-     * @return
+     * @return tara din care este utilizatorul
      */
     public String getCountry() {
         return country;
@@ -108,7 +104,6 @@ public class User {
 
     /**
      * setter pt country
-     * @return
      */
     public void setCountry(final String country) {
         this.country = country;
@@ -116,7 +111,7 @@ public class User {
 
     /**
      * getter pt balanta
-     * @return
+     * @return balanta contului
      */
     public Integer getBalance() {
         return balance;
@@ -124,7 +119,6 @@ public class User {
 
     /**
      * setter pt balanta
-     * @return
      */
     public void setBalance(final Integer balance) {
         this.balance = balance;
@@ -132,7 +126,6 @@ public class User {
 
     /**
      * Override tostring
-     * @return
      */
     @Override
     public String toString() {
