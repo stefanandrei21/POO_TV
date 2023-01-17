@@ -14,11 +14,7 @@ import Pages.Login;
 import Pages.RegisterPage;
 
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Comparator;
+import java.util.*;
 
 public final class ProgramWorkflow {
     private DataBase dataBase;
@@ -52,6 +48,7 @@ public final class ProgramWorkflow {
         List<Output> listToPrint = new ArrayList<Output>();
         for (Actions action : dataBase.getActions()) {
          //   System.out.println(action);
+
             i++;
             Output output = new Output();
             List<Movie> purchasedMovieList;
@@ -252,10 +249,24 @@ public final class ProgramWorkflow {
                     output.setError("Error");
                 }
             } else if (action.getType().equals("database")) {
-                //Adaug in baza de date
-                addToDataBase(login, action);
-            }
+                if (action.getFeature().equals("add")) {
+                    //Adaug in baza de date
+                    addToDataBase(login, action, output);
+                } else if (action.getFeature().equals("delete")) {
+                    //verific daca exista filmul in baza de date
+                    boolean exMovie = false;
 
+                    for (Movie mv : dataBase.getMovieList()) {
+                        if (mv.getName().equals(action.getDeletedMovie())) {
+                            exMovie = true;
+                        }
+                    }
+                    if (!exMovie) {
+                        output.setError("Error");
+                    }
+                }
+
+            }
             if (output.getError() != null) {
                 listToPrint.add(output);
             }
@@ -588,8 +599,15 @@ public final class ProgramWorkflow {
      * @param login pagina de login, aici este utilizatorul logat
      * @param action actiunea la care sunt, din lista mea de actiuni
      */
-    public void addToDataBase(final Login login, final Actions action) {
-        if (action.getFeature().equals("add")) {
+    public void addToDataBase(final Login login, final Actions action, final Output output) {
+        boolean exMovie = false;
+
+        for (Movie mv : dataBase.getMovieList()) {
+            if (mv.getName().equals(action.getNameOfMovie())) {
+                exMovie = true;
+            }
+        }
+        if (action.getFeature().equals("add") && !exMovie) {
             Movie addNewMovie = new Movie(action.getNameOfMovie(),
                     Integer.parseInt(action.getYearOfMovie()),
                     action.getDurationOfMovie(), action.getGenre(), action.getCountriesBanned(),
@@ -611,6 +629,8 @@ public final class ProgramWorkflow {
                 login.getUserLoggedIn().getNotifications().add(notif);
 
             }
+        } else {
+            output.setError("Error");
         }
     }
 

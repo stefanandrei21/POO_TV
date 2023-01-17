@@ -1,7 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.simple.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +34,6 @@ public final class CreateJsonFile {
 
             if (out.getCurrentUser() != null) {
                 Map<String, Object> myObj3 = new LinkedHashMap<>();
-                JSONObject json3 = new JSONObject();
                 myObj3.put("name", out.getCurrentUser().getName());
                 myObj3.put("password", out.getCurrentUser().getPassword());
                 myObj3.put("accountType", out.getCurrentUser().getAccountType());
@@ -53,7 +51,7 @@ public final class CreateJsonFile {
                 newObj.put("notifications", out.getCurrentUser().getNotifications());
                 json.put("currentUser", newJson);
                 myObject.put("currentUser", newObj);
-                //json.put("text", out.getCurrentUser().getTokensCount());
+
             } else {
                 json.put("currentUser", out.getCurrentUser());
                 myObject.put("currentUser", out.getCurrentUser());

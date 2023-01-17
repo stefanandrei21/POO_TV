@@ -74,3 +74,27 @@ si setters;
 -ProgramWorkflow - primeste database si rezolva functionarea dorita in Work, avand si o functie extra
 pe care o folosesc sa fac DeepCopy unei liste de obiecte
 
+IN ETAPA 2:
+	Adaug in clasa Current User: -lista cu genurile la care utilizatorul are subscribe,
+				     -mapa pentru a verifica like urile in functie de gen pentru a trimite notificarea finala
+	Adaug clasa Notification care contine: movieName(filmul pe care il recomand) si message(messajul adaugat)
+	
+	Restul functionalitatilor sunt adaugate in clasa ProgramWorkflow: Adaug posibilitatea de a adauga un film, mai intai
+verificand daca filmul este vazut sau nu.
+	Adaug notificarile, printr o lista de clasa Notification, cele pe baza de like uri cat si cea finala in caz ca utilizatorul
+este premium.
+	Restructurez codul, si completez JavaDoc la indrumarile corectorului. Astfel incat in etapa 1 aveam toata logica actiunii intr-o 
+metoda, iar acum am separat pentru fiecare actiune am cate o metoda in clasa ProgramWorkflow.
+Metode ProgramWorkflow: -chPgMovies (aici in caz ca se ajunge pe pagina movies, setez output)
+			-buyPremiumAccount (cumpar cont premium)
+			-buyMovie(cumpar film)
+			-watchAmovie(utilizatorul vizualizeaza filmul)
+			-likeAmovie(utilizatorul da like unui film)
+			-rateAmovie(utilizatorul da rate unui film)
+			-subscribeToGenre(actiunea utilizatorului de a da subscribe la un anumit gen de filme)
+			-addToDataBase(adaug un film in baza de date)
+			-susbscribedUserNotification(notificarea finala a utilizatorului in caz ca acesta este premium)
+			---work (aici trec prin actiuni si vad ce trebuie sa fac)
+
+
+

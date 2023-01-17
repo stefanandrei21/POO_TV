@@ -28,6 +28,8 @@ public final class Actions {
     private final String yearOfMovie;
     private final String subscribedGenre;
 
+    private final String deletedMovie;
+
     public Actions() {
         this.countriesBanned = null;
         this.type = null;
@@ -46,6 +48,7 @@ public final class Actions {
         this.nameOfMovie = null;
         this.yearOfMovie = null;
         this.subscribedGenre = null;
+        this.deletedMovie = null;
     }
 
     public Actions(final String type, final String page, final String feature,
@@ -54,7 +57,8 @@ public final class Actions {
                    final List<String> genre, final String movie, final Integer count,
                    final String rate, final List<String> countriesBanned,
                    final Integer durationOfMovie, final String nameOfMovie,
-                   final String yearOfMovie, final String subscribedGenre) {
+                   final String yearOfMovie, final String subscribedGenre,
+                   final String deletedMovie) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -76,6 +80,7 @@ public final class Actions {
         this.nameOfMovie = nameOfMovie;
         this.yearOfMovie = yearOfMovie;
         this.subscribedGenre = subscribedGenre;
+        this.deletedMovie = deletedMovie;
     }
 
     public Actions(final String type, final String page,
@@ -85,7 +90,8 @@ public final class Actions {
                    final String movie, final Integer count,
                    final String rate, final List<String> countriesBanned,
                    final Integer durationOfMovie, final String nameOfMovie,
-                   final String yearOfMovie, final String subscribedGenre) {
+                   final String yearOfMovie, final String subscribedGenre,
+                   final String deletedMovie) {
         this.type = type;
         this.page = page;
         this.feature = feature;
@@ -102,6 +108,11 @@ public final class Actions {
         this.nameOfMovie = nameOfMovie;
         this.yearOfMovie = yearOfMovie;
         this.subscribedGenre = subscribedGenre;
+        this.deletedMovie = deletedMovie;
+    }
+
+    public String getDeletedMovie() {
+        return deletedMovie;
     }
 
     public List<String> getCountriesBanned() {

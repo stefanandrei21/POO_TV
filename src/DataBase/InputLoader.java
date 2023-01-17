@@ -112,7 +112,8 @@ public final class InputLoader {
                     countriesBanned.add(jsonCountrie.toString());
                 }
                 String name = (String) ((JSONObject) jsonMovie).get("name");
-                String yearFromInput = (String) ((JSONObject) jsonMovie).get("year");
+                String yearFromInput = (String) ((JSONObject) jsonMovie).get("year").toString();
+
                 Integer year = 0;
                 if (year != null) {
                     year = Integer.parseInt(yearFromInput);
@@ -142,7 +143,12 @@ public final class InputLoader {
                 String feature = (String) ((JSONObject) jsonAction).get("feature");
                 String countStr = (String) ((JSONObject) jsonAction).get("count");
                 String subscribedGenre = (String) ((JSONObject) jsonAction).get("subscribedGenre");
-                String rate = (String) ((JSONObject) jsonAction).get("rate");
+                String rate = null;
+                if (((JSONObject) jsonAction).get("rate") != null) {
+                    rate =  ((JSONObject) jsonAction).get("rate").toString();
+                }
+
+                String deletedMovie = (String) ((JSONObject) jsonAction).get("deletedMovie");
                 Integer count = 0;
                 if (countStr != null) {
                     count = Integer.parseInt(countStr);
@@ -211,7 +217,7 @@ public final class InputLoader {
                 Integer durationOfMovie = 0;
                 if (jsonAddedMovie != null) {
                     nameOfMovie = (String) jsonAddedMovie.get("name");
-                    yearOfMovie = (String) jsonAddedMovie.get("year");
+                    yearOfMovie = (String) jsonAddedMovie.get("year").toString();
                     Long durationOfMAux = (Long) jsonAddedMovie.get("duration");
                     if (durationOfMAux != null) {
                         durationOfMovie = durationOfMAux.intValue();
@@ -239,7 +245,7 @@ public final class InputLoader {
                 }
                 actionsList.add(new Actions(type, page, feature, userFromActions, startsWith,
                         rating, duration, actors, genre, movie, count, rate, countriesForMovie,
-                        durationOfMovie, nameOfMovie, yearOfMovie, subscribedGenre));
+                        durationOfMovie, nameOfMovie, yearOfMovie, subscribedGenre, deletedMovie));
             }
         }
         return actionsList;
